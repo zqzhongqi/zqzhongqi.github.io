@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Words Learning</title>
+ <style type="text/css">
+	/* @font-face块，指定要下载的字体文件 */ 
+	@font-face {
+		font-family: 'Arial Black' ;
+		src: url('pictures/Arial Black-webfont.woff2') format('woff2') ,
+			 url('pictures/Arial Black-webfont.woff') format('woff') ,
+			 url('pictures/Arial Black-webfont.svg') format('svg') ; 
+		font-weight: normal ;
+		font-style: normal ;
+	}
+
+	html,body{
+		margin: 0 ;
+		/* font-size:页面打开时，字体大小由用户端的window.innerWidth属性决定 */
+	}
+	html{
+		 font-family: "Helvetica", "Arial" ;
+		 height: 100% ;
+	}
+
+	header{
+		font-family: 'Arial Black' ;
+		height: 150px ;
+		background: url("pictures/header.jpg") no-repeat center ;
+		color: rgb(255,255,255) ;
+		text-align: center ;
+		text-shadow: green 3px 2px ;/* text-shadow 属性向文本添加一个或多个阴影 */
+	}
+	header>h1{
+		margin: 0 auto ;
+		padding: 8px ;
+		font-size: 37px ;
+		letter-spacing: 5px ;/* letter-spacing 属性增加或减少字符间的空白（字符间距）*/
+	}
+	header>h1>span{
+		font-size: 6px ;
+	}
+
+	nav{
+		height: 50px ;
+		margin: 30px auto ;
+	}
+    nav span{
+		font-size: 30px ;
+		font-family: '华文楷体' ;
+		font-weight: bold ;
+		border: 3px outset ;
+		color: rgb(255,255,255) ;
+		background-color: rgb(0,50,0) ;
+		margin: 10px ;
+		border-radius: 8px ;
+		padding: 5px ;	
+		cursor: pointer ;	
+	 }
+     nav span:hover{
+		background-color: rgb(100,149,237) ;
+	 }
+	  .onclickStyle{
+		border: 3px inset ;
+		background-color: rgb(0,0,100) ;
+		color: rgb(255,255,255) ;
+	 }
+
+	article{
+		font-family: 'Helvetica' , '宋体' ;
+		border: 3px solid rgb(60,179,113) ;
+		padding: 5px ;
+		text-align: justify ;
+		line-height: 1.5 ;/* 用于设置多行元素的空间量，如多行文本的间距 */
+		color: rgb(0,100,0) ;
+		background-color: rgb(212,242,231) ;
+	}
+	article#help{
+		position: relative ;
+		background-color: rgb(46,139,87) ;
+		overflow: hidden ;
+	} 
+	article#help div#bgPicture{
+		position: absolute ;
+		height: 98% ;
+		left: 1% ;
+		top: 1% ;
+		z-index: 1 ;/* z-index 属性设定了一个定位元素及其后代元素或 flex 项目的 z-order。当元素之间重叠的时候，z-index 较大的元素会覆盖较小的元素在上层进行显示。*/
+	}
+	article#help p#textInfo{
+		color: white ;
+		font-size: 22px ;
+		font-weight: bold ;
+		text-indent: 32px ;/* text-indent 属性规定文本块中首行文本的缩进 */
+		text-shadow: rgb(65,105,225) 2px 1px ;
+		z-index: 2 ;
+		padding: 4% ;
+	}
+	article#word input#English{
+		font-family: 'Bell MT';
+		font-weight: bold ;
+	}
+
+	@media screen and (min-width:600px){
+		section{
+			display: flex ;
+		}
+		article#help{
+			flex: 1 ;
+		}
+		article#word{
+			flex: 2 ;
+			text-align:center ;
+		}
+		article#help div#bgPicture img{
+			width: 100% ;
+			/*height:100%;如果设置这条，会造成窄屏幕出现图像变形*/
+		}
+		article#help p#textInfo{
+			position: relative ;
+			left: 2px ;
+			top: 55% ;
+		}
+	}/*end of media screen @ min-width:600px */
+
+	@media screen and (max-width:600px){
+		article#help{
+			height: 25% ;
+		}
+		article#word{
+			height: 70% ;
+			text-align: center ;
+		}
+		article#help div#bgPicture img{
+			height: 100% ;
+			/*width:100%;如果设置这条，会照成窄屏幕出现图像变形*/
+		}
+		article#help p#textInfo{
+			position: relative ;
+			line-height: 1.5 ;
+			margin-left: 35% ;
+		}
+	}/*end of media screen @ max-width:600px */
+
+	footer{
+		font-family: 'Arial ', '宋体';
+		background-color: rgb(46,139,87) ;
+		color: rgb(255,255,255) ;
+		font-size: 20px ;
+		text-align: center ;
+		height: 50px ;
+		padding-top: 15px ;
+	}
+
+	article#word{
+		text-align: center ;
+		cursor: pointer ;
+		position: relative ;
+	}
+	article#word>h1{
+		font-size: 25px ;
+		color: rgb(	0,0,0) ;
+		margin: 4px auto ;
+	}
+	article#word>input{
+		width: 90% ; 
+		font-family: 'Arial' ;
+		color: rgb(255,42,42) ;
+		font-size: 2.1em ;
+		margin: 0.2em auto ;
+		text-align: center ;
+	}
+	article#word p#pronunciation{
+		font-family: 'Bell MT' ;
+		color: rgb(0,150,0) ;
+		font-size: 45px; 
+		margin: 16px auto ;
+	}
+	article#word p#Chinese{
+		font-family: '宋体' ;
+		font-size: 24px ;
+		font-weight: bold ; 
+		color: rgb(0,0,0) ;
+		margin: 0.5em auto ;
+	}
+	article#word nav{
+		font-family: '华文行楷' ;
+		font-weight: bold ;
+		font-size: 30px ;
+		border: 3px ;
+		border-radius: 8px ;
+		padding: 5px ;
+		cursor: pointer ;	
+	}
+	article#word nav span{
+		margin-right: 10px ;
+	}
+	article#word nav span:hover{
+		background-color: rgb(100,149,237) ;
+	}
+	article#word p#Chinese p{
+		font-size: 1em ;
+		margin: 0.2em auto ;
+		border: 1px solid black ;
+	}
+	article#word p#Chinese p:hover{
+		background-color: rgb(100,200,200) ;
+	}
+  </style>
+
+  <script src="pictures/words.js">
+  </script>
+
+  <script>
+	//设计“word对象”的数据结构，并用对象的方法实现初步的代码组织
+	//en6为全局变量，由大学英语6级词汇形成字符串，组成数组，结构如下：
+	//var en6=["a/ei/art.一(个)；每一(个)；(同类事物中)任一个", ...]
+	var myWord = {
+		id: 0 ,
+		English: "" ,
+		pronunciation: "" ,
+		Chinese: "" ,
+		getWord: function(id){
+			var id = id || this.id ;
+			var wordArr = en6[id].split("/") ;
+			this.English = wordArr[0];
+			this.pronunciation = wordArr[1];
+			this.Chinese = "" ;
+			for (var i=2 ; i < wordArr.length; i++){
+				this.Chinese += wordArr[i] ;
+			}
+		} ,//end of getWord Method
+		showWord : function(id){
+			var id = id || this.id ;
+			this.getWord(id);
+			var  EnglishDom = my$("article#word input#English") ;
+			var  pronunciationDom = my$("article#word p#pronunciation")  ;
+			var  ChineseDom = my$("article#word p#Chinese") ;
+			EnglishDom.value = this.English ;
+			pronunciationDom.textContent = "【" + this.pronunciation + "】";
+			ChineseDom.textContent = this.Chinese ;
+		} //end of showWord Method
+	};//end of myWord Object
+  
+	//建立一个模型对象，模拟和记录APP的运行状态
+	var Model = {
+		learnWords : [] , //学习的单词的id组成的数组
+		learnId : 0 ,//学习的单词的id
+		choices: "" ,//选择
+		myPictures: null ,//帮助区的背景图
+		showHelp: function(){//显示帮助信息
+			var helpInfoDom = my$("article#help p#textInfo") ;
+			var helpInfo = "" ;
+			switch (this.choices){
+				case "" : helpInfo = "You have not set any button of the Menu Bar . " ; break ;
+				case "read" : helpInfo = "已进入" + "<读一读>模式!已为您选择10个单词，点击单词区下一个按钮继续。" ; break ;
+				case "write" : helpInfo = "已进入" + "<拼写>模式!输入单词后，点击确认按钮查看结果，点击下一个按钮，切换单词。" ; break ;
+				case "select" : helpInfo = "已进入" + "<选择题>模式!请点击所给单词的中文选项进行回答，点击下一个按钮继续。" ; break ;
+				case "search" : helpInfo =  "已进入" + "<单词查询>模式!输入你要搜的英文，点击确认按钮，确认搜索词，" + "再点击下一个按钮，就可逐个查看搜到的类似单词。" ; break ;
+				case "listen" : helpInfo = "已进入" + "<听原文>模式!该功能正在开发,目前只能听《傲慢与偏见》的原文，敬请期待！" ; break ;
+			}
+			helpInfoDom.textContent = helpInfo ;
+			//为每次反馈的帮助，换一个图片背景
+			var bgPictureDom =  my$("article#help div#bgPicture") ;
+			var randInt =  Math.floor(Math.random()*7) ;
+			var childDom = bgPictureDom.querySelector("img");
+			bgPictureDom.removeChild(childDom);
+			bgPictureDom.appendChild(this.myPictures[randInt]);
+		},//End of showHelp
+		similarWords: [],
+		nowSimilarId: 0,
+	}; //End of  Model 
+  
+	for (var i=0; i < 10 ; i++){
+		var randInt = Math.floor(Math.random()*en6.length) ;
+		Model.learnWords.push(randInt);
+	}//每次循环产生10个随机单词放在 Model 模型中
+  
+  
+	window.onload = function(){
+		//动态控制UI，包括：针对不同屏幕的字体大小设置，主区域的高度设置
+		var fontSize =  Math.floor(window.innerWidth/100) ;
+
+		switch (fontSize){
+			case 17 :	 case 16 :	 case 15 : 
+			case 14 :	 case 13 : 	 case 12 :
+			case 11 : fontSize =  fontSize*1.5 ; break;
+			case 10 : 
+			case 9 :  fontSize =  fontSize*1.8 ; break;
+			case 8 :  
+			case 7 :  fontSize =  fontSize*2 ; break;
+			case 6 :  
+			case 5 :  fontSize =  fontSize*2.5 ; break;
+			case 4 : 
+			case 3 :  fontSize =  fontSize*3 ; break;
+			default:  fontSize =  fontSize*3; 
+		}
+		document.body.style.fontSize = fontSize + "px" ;
+
+		var sectionHeight =  window.innerHeight - 150 - 50 - 30 ;//让section尽量填满剩余的纵向空间，最后的30这个数字没有依据，仅凭经验来设置为30px。
+		document.querySelector("section").style.height = sectionHeight + "px";
+
+		//为所有自定义的按钮设定特殊风格
+		var Buttons = my$("header nav span");
+		for (var i=0; i<Buttons.length ; i++) {
+			Buttons[i].onclick = function(){
+				for (var j=0; j<Buttons.length ; j++){
+					Buttons[j].className = "" ;
+				}
+				this.className = "onclickStyle" ;
+			};//end of  Buttons[i].onclick
+		}
+
+		//将图片文件导入内存变量，用Model对象的属性实现访问，每次打开页面或用户点击菜单按钮，则随机在帮助区显现一张图片。
+		var myPictures = [] ; //图像对象 组成的 数组
+		for (var i=1; i<8; i++ ){
+			var img = new Image();
+			img.src = "pictures/" + i + ".jpg" ;
+			myPictures.push(img) ;
+		}
+		Model.myPictures = myPictures ; //把图片集传给Model对象，提供使用
+		var bgPictureDom =  my$("article#help div#bgPicture") ;
+		var randInt =  Math.floor(Math.random()*7) ; //生成[0,7)之间的随机整数 
+		bgPictureDom.appendChild(myPictures[randInt]);
+
+
+		/*
+		下面统一使用Dom元素的addEventListener API方法，实现事件监听，这是现代Web 浏览器的标准。
+		与给Dom元素属性事件赋值相比，addEventListener方法可以对一个事件，反复叠加使用多个函数监听。
+		代码在前面使用了对按钮的onclick事件赋值，实现交互样式变化，下面若再对按钮使用onclick事件赋值，则会清除变化样式的函数。
+		*/
+
+		my$("nav span#read").addEventListener("click", function(){
+			Model.choices = this.id ;
+			Model.showHelp();
+
+			var okDom = my$("section article#word nav span#ok");
+			okDom.onclick = function(){};//读一读没有确认需求，清除其他模式的，确认按钮代码
+
+			var nextDom = my$("section article#word nav span#next");
+			nextDom.onclick = function(){
+				var learn = Model.learnWords ;
+				var id = learn[Model.learnId] ;
+				//console.log("en6:" + id);
+				my$("article#word h1").textContent = "NO. " + (Model.learnId+1) + " / " + "单词 ID : "+ id ;
+				myWord.showWord(id);
+				if (Model.learnId + 1 === learn.length){
+					Model.learnId  = 0 ;
+				}
+				else{
+					Model.learnId ++ ;
+				}
+			}//end of function nextDom.onclick
+		},false);//End nav span#read".addEventListener "click"
+
+		my$("nav span#write").addEventListener("click", function(){
+			Model.choices = this.id ;
+			Model.showHelp();
+
+			Model.learnId  = 0 ;
+			my$("article#word h1").textContent = "请输入英文单词！" ;
+			myWord.getWord(Model.learnWords[Model.learnId]);
+			myWord.showWord(Model.learnWords[Model.learnId]);
+			my$("article#word input#English").value = "" ;
+			var nextDom = my$("section article#word nav span#next");
+			var okDom = my$("section article#word nav span#ok");
+
+			okDom.onclick = function(){
+				var inputEnglishDom = my$("section article#word input#English");
+				var inputs = inputEnglishDom.value.trim() ;
+				if (inputs === myWord.English){
+					my$("article#word h1").textContent = "拼写正确： " + inputs ;
+				}
+				else{
+					my$("article#word h1").textContent = "拼写错误, 正确的拼写是： " + myWord.English ;
+				}
+			}//处理okDom.onclick结束
+			nextDom.onclick = function(){
+				Model.learnId < Model.learnWords.length - 1 ?  Model.learnId ++ : Model.learnId = 0 ;
+				my$("article#word h1").textContent = "请输入英文单词！" ;
+				myWord.getWord(Model.learnWords[Model.learnId]);
+				myWord.showWord(Model.learnWords[Model.learnId]);
+				my$("article#word input#English").value = "" ;
+			}//处理空格键结束
+		},//end of nav span#write click
+		false);//end of 拼写 nav span#write
+
+
+		my$("nav span#select").addEventListener("click", function(){
+			Model.choices = this.id ;
+			Model.showHelp();
+
+			Model.learnId = 0 ;
+			myWord.showWord(Model.learnWords[Model.learnId]);
+			//Model.learnWords是一个数组，存放抽取的10个单词用于的id，（id可以通过myWord对象的getWord(id)和showWord(id)方法使用）
+			my$("article#word h1").textContent = "请选择英文单词对应的中文含义！" ;
+			var nextDom = my$("section article#word nav span#next");
+			var okDom = my$("section article#word nav span#ok");
+			okDom.onclick = function(){} ;
+			showSelection() ;
+			function showSelection(){
+				var parent = my$("article#word p#Chinese") ;
+				parent.textContent = "" ;//清除单词中文区的所有内容
+				for (var i=0; i<3 ; i++) {
+					var pDom = document.createElement("p");
+					pDom.textContent = "临时文字内容" ;
+					parent.appendChild(pDom);
+				}
+				var Chinese = my$("section article#word p#Chinese p");
+				var option = Math.floor(Math.random()*3) ;
+				for (var i=0; i<3 ; i++){
+					if (option ===i){
+						myWord.getWord(Model.learnWords[Model.learnId]);
+						Chinese[i].textContent = myWord.Chinese ;
+						Chinese[i].option = "ok" ;
+						English.textContent = myWord.English ;
+					}
+					else{
+						var j = Math.floor(en6.length*Math.random());
+						myWord.getWord(j);
+						Chinese[i].textContent = myWord.Chinese ; 
+						Chinese[i].option = "wrong" ;
+					}
+					Chinese[i].onclick = function(){
+						if (this.option ==="ok"){
+							my$("article#word h1").textContent ="恭喜你! 答对了！";
+						}
+						else{
+							my$("article#word h1").textContent ="很遗憾！答错了!";
+						}
+					};//end of 选项 的click
+				}//end of for loop
+			}////end of showSelection function
+			nextDom.onclick = function(){
+				if (Model.learnId === Model.learnWords.length -1){
+					Model.learnId = 0 ;
+				}
+				else{
+					Model.learnId ++ ;
+				}
+				myWord.showWord(Model.learnWords[Model.learnId]);
+				my$("article#word h1").textContent = "为英文单词，选择正确中文含义！" ;
+				showSelection();
+			}//nextDom.onclick切换到下一单词
+		}//end of select menu 
+		,false);//end of 选择题 nav span#select
+
+		my$("nav span#search").addEventListener("click", function(){
+			Model.choices = this.id ;
+			Model.showHelp();
+
+			var inputEnglishDom = my$("section article#word input#English");
+			inputEnglishDom.value = "" ;
+			my$("section article#word p#pronunciation").textContent = "";
+			my$("section article#word p#Chinese").textContent = "";
+
+			my$("article#word h1").textContent = "请输入3个及以上字母进行单词搜索" ;
+			my$("article#word input#English").value = "" ;
+			var nextDom = my$("section article#word nav span#next");
+			var okDom = my$("section article#word nav span#ok");
+
+			okDom.onclick = function(){
+				var inputs = inputEnglishDom.value.trim() ;
+				my$("article#word h1").textContent = "你正在搜: " + inputs ;
+				var  similar = [] ;
+				for (var i=0; i<en6.length ; i++){
+					myWord.getWord(i);
+
+				if (myWord.English === inputs || ( inputs.length >=3 && myWord.English.search(inputs)!==-1 ) ) {
+				  //与输入完全匹配 或者 输入3个及以上字母的关键字，并能部分匹配
+				  similar.push(i) ;
+				}
+				}//end of en6 loop
+				Model.similarWords = similar ;
+			}//处理okDom.onclick结束
+
+			nextDom.onclick = function(){
+				var i =  Model.nowSimilarId ;
+				var id = Model.similarWords[i] ;
+				myWord.showWord(id);  
+				if (Model.nowSimilarId <Model.similarWords.length -1){
+					Model.nowSimilarId ++ ;
+				}
+				else{
+					Model.nowSimilarId = 0 ;
+				}
+			}//处理nextDom.onclick结束
+		}//end of 匿名函数onclick
+		,false);// 单词查询
+
+		my$("nav span#listen").addEventListener("click", function(){
+			Model.choices = this.id ;
+			Model.showHelp();
+			my$("article#word h1").textContent = "点击确认按钮，实现音频播放器的开/关！" ;
+			my$("article#word input#English").value = "Jane Autin" ;
+			my$("article#word p#pronunciation").textContent = "Pride And Prejudic" ;
+			my$("article#word p#Chinese").textContent = "原文音频，点击确认播放" ;
+			var nextDom = my$("section article#word nav span#next");
+			var okDom = my$("section article#word nav span#ok");
+			var voice = new Audio();
+			var i = 1 ;
+			var path ="http://lijianhong.top/mp3/pride and prejudice 0" ;
+			voice.src = path + i + ".mp3";
+			var playing = false;
+			var timer = (new Date()).getTime();
+			voice.addEventListener("canplaythrough",function(){
+				var timer1 = (new Date()).getTime();
+				var costTime = timer1 - timer ;
+				console.log("canplaythrough 事件发生在 " + costTime +" ms .");
+			},false);
+			okDom.onclick = function(){
+				if (!playing) {
+					voice.play();
+				}
+				else{
+					voice.pause();
+				}
+				playing = ! playing ;
+			};
+			nextDom.onclick = function(){
+				i++ ;
+				voice.src = path + i + ".mp3";
+				timer = (new Date()).getTime();
+			};
+		},false);//听原文 《傲慢与偏见》的原文朗读音频
+
+		//实现页脚信息，对当前时间反馈
+		var myDate = new Date();
+		my$("footer").textContent += myDate.getFullYear() +'年' + (myDate.getMonth()+1) +'月' + myDate.getDate() +'日'; 
+
+	};//end of window.onload
+  
+	/* 自定义的通用函数my$：引用Web页上的Dom元素API有二个，querySelectorAll和querySelector，API名称不好拼写，本函数可以合并这二个API的功能，并简化代码的编写 */
+	function my$(para){
+		if(!para){
+			throw para + " : wrong Selector para,you get nothing !" ;
+		}
+		var dom = document.querySelectorAll(para) ;
+		if (dom.length > 1){
+			console.log("you get Dom Array list reference.");
+			return dom ;
+		}
+		else{
+			dom = document.querySelector(para) ;
+			if (dom){
+				console.log("you get a Dom reference.");
+				return dom ;
+			}
+			else{
+				throw para + " : wrong Selector para,you get nothing !" ;
+			}
+		}
+	}//end of my$
+   
+  </script>
+ </head>
+
+ <body>
+  <header> <!-- 页眉 -->
+    <h1>Words Learning(CET-6)</h1> 
+	<nav><!-- 导航栏 -->
+     <span   id="read">读一读</span>
+     <span   id="write">拼写</span>
+     <span   id="select">选择题</span>
+     <span   id="search">单词查询</span>
+     <span   id="listen">听原文</span>
+    </nav>
+  </header>
+
+  <section>
+	<article id = "help">
+	 <p id="textInfo">
+	 请点击状态导航栏，选择相应的单词学习模式。
+	 </p>
+	<div id="bgPicture" >
+	</div>
+	</article>
+
+	<article id = "word">
+	<h1>当前单词</h1>
+	<input id="English" type="text" value="ability">
+	<p id="pronunciation">/ ə'biliti /</p>
+	<p id="Chinese">n.能力；本领；才能，才干；专门技能，天资</p>
+	<nav>
+	 <span id="ok">确认</span>
+	 <span id="next">下一个</span>
+	</nav>
+	</article>
+  </section>
+
+  <footer>
+    Code by 20192994钟琪 of 19Java1班 on
+  </footer>
+ </body>
+</html>
+
